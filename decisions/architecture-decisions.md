@@ -20,6 +20,8 @@
 | ADR-010 | Security defaults as the MFA baseline, Conditional Access as the licence-dependent enhancement | Proposed |
 | ADR-011 | Documented manual endpoint baseline, with Intune-based management as the licence-dependent upgrade | Proposed |
 | ADR-012 | Separate administrative accounts and two emergency access accounts; no standing production administration for developers | Proposed |
+| ADR-013 | One Key Vault per environment, Azure RBAC authorization, and managed identities for application access | Proposed |
+| ADR-014 | Group-based Azure roles at resource-group scope; subscription-scope roles limited to a minimal set of administrative accounts | Proposed |
 
 ---
 
@@ -232,3 +234,41 @@
 7. **Disadvantages:** More accounts to manage; administrators switch accounts; permanent administrative roles remain between uses; the emergency accounts need disciplined custody and testing.
 8. **Risks:** Neglected emergency accounts, or administrative accounts used for daily work. *Mitigation:* alerts on any emergency sign-in, validation at least every 90 days, regular access reviews, and a rule that administrative accounts are not used for email or browsing.
 9. **Revisit when:** Privileged activity grows, a qualifying licence for time-limited elevation is available, or a compliance requirement calls for stricter privileged access control.
+
+---
+
+## ADR-013 — One Key Vault per environment, Azure RBAC authorization, and managed identities for application access
+
+1. **Context:** Applications need secrets, keys, and certificates, and Production secrets must not be reachable by the access given for Development (ADR-002, ADR-012). Microsoft describes Key Vault as a service for secrets, keys, and certificates, with authentication through Microsoft Entra ID and authorization through Azure RBAC or access policies. Its overview describes a vault per application restricted to a specific application and team, and does not address environments.
+2. **Problem:** How should vaults be organized, and how should applications and people be authorized?
+3. **Options considered:**
+   - A) One shared vault for all environments.
+   - B) One vault per environment.
+   - C) One vault per application and environment.
+4. **Decision:** Option B at the baseline, scaling to Option C when several applications exist. Authorization uses Azure RBAC, and applications use managed identities with the narrowest role.
+5. **Reasoning:** Matching the vault boundary to the environment boundary lets role assignments keep Production secrets separate from Development access. Managed identities avoid stored credentials. The environment-level choice is the author's recommendation, not a Microsoft statement.
+6. **Advantages:** Clear RBAC boundary per environment; no credentials in code or configuration; consistent with the role model.
+7. **Disadvantages:** More vaults to manage than a single shared vault; some work to grant each application's identity access.
+8. **Risks:** Over-broad roles on the vault, or secrets copied between environments. *Mitigation:* roles at vault scope for groups and identities, no human access to the production vault by developers, access logged, and exposed secrets rotated.
+9. **Revisit when:** More applications are hosted, Production moves to its own subscription, hosting selection (ADR-004) changes how identities are issued, or a requirement calls for hardware-backed key protection or other vault features not assessed here.
+
+> Vault tier, recovery protections, and pricing are not assessed in this portfolio. Key Vault is for application secrets and **not** for employee passwords.
+
+---
+
+## ADR-014 — Group-based Azure roles at resource-group scope; subscription-scope roles limited to a minimal set of administrative accounts
+
+1. **Context:** One subscription with resource groups per environment (ADR-002). Microsoft documents that Azure RBAC is additive, that a role assignment combines a principal, a role definition, and a scope, and that scopes run from management group to subscription to resource group to resource. A broad assignment at a higher scope therefore overrides a narrower one beneath it. The access matrix left open whether the cloud administrator needs the Owner role.
+2. **Problem:** How should Azure roles be assigned so that environment separation holds and administrative capability is still available?
+3. **Options considered:**
+   - A) Broad roles at subscription scope for the technical team.
+   - B) Roles assigned to groups at resource-group scope, with a minimal set of administrative accounts holding subscription-scope rights.
+   - C) Time-limited elevation for all privileged access (Privileged Identity Management).
+4. **Decision:** Option B. The Owner role at subscription scope is held only by the separate administrative accounts of the cloud administrator (and at most one deputy). Everyone else receives roles at resource-group scope through groups. The pipeline identity is a managed identity or service principal scoped to the target resource group. Option C is the licence-dependent enhancement.
+5. **Reasoning:** Resource-group scope keeps each environment's access separate, and group-based assignment follows role changes. Someone must be able to create resource groups and manage role assignments, so a small number of subscription-scope accounts is unavoidable in a single-subscription design. Time-limited elevation requires Microsoft Entra ID P2 or Entra ID Governance and is not assumed (ADR-012).
+6. **Advantages:** Preserves the environment boundary; small, reviewable set of powerful accounts; no licence dependency.
+7. **Disadvantages:** The subscription-scope accounts are powerful and permanent without elevation tooling; creating resource groups needs a higher scope than operating inside them.
+8. **Risks:** Role creep and subscription-scope assignments made for convenience. *Mitigation:* quarterly review of Azure role assignments at subscription and resource-group scope, no subscription-scope roles for developers, and alerts on changes to role assignments.
+9. **Revisit when:** A qualifying licence enables time-limited elevation, a narrower built-in or custom role can replace Owner for the cloud administrator (to be evaluated and verified, not assumed), headcount grows, or Production moves to its own subscription.
+
+> Which built-in role best fits each duty must be verified against the permissions each role actually grants before use. The role names in the access matrix are illustrative.

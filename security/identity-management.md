@@ -5,6 +5,8 @@
 
 Diagram: **Diagram 3 — Identity and Access Architecture** (`diagrams/03-identity-and-access.drawio`).
 
+![Diagram 3: Identity and Access Architecture](../diagrams/03-identity-and-access.png)
+
 ## 1. Purpose and scope
 
 This document describes how people and devices are identified, authenticated, and authorized in the reference organization, and how company laptops are secured.

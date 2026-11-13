@@ -62,15 +62,15 @@ Built-in Azure roles are used where they fit. Microsoft's documentation shows th
 |-------|----------------|------------|---------------|--------------------|
 | `grp-developers` | Contributor | Reader | Reader (limited) | — |
 | `grp-leads` | Contributor | Contributor | Reader | — |
-| `grp-cloud-admins` | Owner or Contributor (to be decided) | Owner or Contributor | Owner or Contributor | Minimal; see ADR-002 |
+| `grp-cloud-admins` | Contributor | Contributor | Contributor | Owner for the separate administrative accounts only (at most two; ADR-014) |
 | `grp-it-admins` | Reader | Reader | Reader | — |
 | `grp-management` | — | — | — | Reader (cost and overview only) |
 
-Open points (resolved in Phase 5):
+Resolved in Phase 5 (see ADR-014):
 
-- Whether the Cloud Administrator needs the Owner role at all, or whether Contributor plus a narrowly scoped role-assignment permission is enough.
-- How the pipeline identity is granted deployment rights to Staging and Production (managed identity or service principal, scoped to the resource group).
-- Whether **Contributor** at the Development resource group is too broad for every developer.
+- **Owner role:** the cloud administrator's separate administrative account holds Owner at subscription scope (with at most one deputy) so it can create resource groups and manage role assignments. The group-based assignments at resource-group scope are Contributor. A narrower role that replaces Owner is to be evaluated and verified, not assumed.
+- **Pipeline identity:** a managed identity or service principal scoped to the target resource group (detail in Phase 6).
+- **Developer Contributor on Development:** kept for the Development resource group only, subject to the quarterly review. Staging is read-only for developers and Production is read-only with logged access.
 
 ## 6. Limitations
 
