@@ -112,7 +112,7 @@ Six editable diagrams (diagrams.net) are planned: main architecture, office netw
 | 2 | Main architecture | Draft |
 | 3 | Network | Draft |
 | 4 | Identity and security | Draft |
-| 5 | Azure | Not started |
+| 5 | Azure | Draft |
 | 6 | DevOps | Not started |
 | 7 | IT operations | Not started |
 | 8 | Final review, PDF, presentation | Not started |
