@@ -15,6 +15,8 @@
 | ADR-005 | No VPN, Kubernetes, or multi-subscription design by default | Proposed |
 | ADR-006 | Treat Microsoft 365 data protection separately from Azure workload backup | Proposed |
 | ADR-007 | Use Infrastructure as Code (Azure Bicep) as a documented concept, not a deliverable | Proposed |
+| ADR-008 | Three baseline VLANs (Staff, Guest, Management) with the firewall as the single inter-VLAN policy point | Proposed |
+| ADR-009 | Shared-passphrase Wi-Fi for staff as the baseline, with 802.1X as the upgrade path | Proposed |
 
 ---
 
@@ -137,3 +139,40 @@
 7. **Disadvantages:** Cannot demonstrate syntax proficiency or deployment results.
 8. **Risks:** Readers expecting working code. *Mitigation:* clear labelling and README limitations.
 9. **Revisit when:** A sandbox is available to validate templates, at which point tested modules could be added and marked *Implemented*.
+
+---
+
+## ADR-008 — Three baseline VLANs (Staff, Guest, Management) with the firewall as the single inter-VLAN policy point
+
+1. **Context:** A single office with about 15 employees, company-managed laptops, visitors who need internet access, and network devices that need administration (A-07, N-01, N-02).
+2. **Problem:** How much segmentation is justified, and where should traffic between segments be controlled?
+3. **Options considered:**
+   - A) One flat network for everything.
+   - B) Three VLANs (Staff, Guest, Management), with the firewall routing between them and enforcing policy.
+   - C) Many VLANs (per team, per device type, plus a server VLAN) with a Layer 3 switch.
+4. **Decision:** Option B. A fourth VLAN (shared devices such as a printer) is documented as optional and not deployed in the baseline.
+5. **Reasoning:** Guest devices must not reach company resources, and network device management should not be reachable from ordinary devices. These two needs justify separate segments. More segments would add configuration and troubleshooting effort without a requirement behind them. Routing on the firewall gives one place to define and audit policy.
+6. **Advantages:** Simple to document and audit; guest isolation; protected management plane; room to add the optional segment.
+7. **Disadvantages:** All inter-VLAN traffic crosses the firewall; the firewall is a single point of failure; no isolation between staff devices.
+8. **Risks:** Segmentation is only as strong as the firewall rules and the switch port and trunk configuration; a misconfiguration can silently remove isolation. *Mitigation:* explicit default-deny rules, a maintained IP and VLAN table, and periodic review of rules and port settings.
+9. **Revisit when:** On-premises servers or shared devices are introduced, headcount or device count grows significantly, a compliance requirement demands finer segmentation, or internal traffic volume makes firewall routing a bottleneck.
+
+> VLAN IDs, subnets, and rules are illustrative. See `architecture/network-architecture.md`.
+
+---
+
+## ADR-009 — Shared-passphrase Wi-Fi for staff as the baseline, with 802.1X as the upgrade path
+
+1. **Context:** Staff Wi-Fi must authenticate devices. The organization is small, has no on-premises servers (N-02), and has not established whether a RADIUS service can be integrated with its identity platform.
+2. **Problem:** Which Wi-Fi authentication model fits a 15-person organization without adding unjustified infrastructure?
+3. **Options considered:**
+   - A) Shared passphrase (WPA3-Personal, or WPA2/WPA3 transition mode for older clients).
+   - B) 802.1X with a RADIUS server (WPA2/WPA3-Enterprise).
+4. **Decision:** Option A as the baseline, with a documented passphrase-rotation rule at offboarding. Option B is the planned upgrade.
+5. **Reasoning:** Option A needs no extra services and is realistic to operate for a small team. Option B gives per-user or per-device control but needs a RADIUS service and credential design whose compatibility with the organization's identity platform must be verified rather than assumed.
+6. **Advantages (A):** Simple, no additional infrastructure, quick to roll out.
+7. **Disadvantages (A):** A single secret known to everyone; no per-user attribution in logs; rotation requires touching every device.
+8. **Risks:** A former employee who knows the passphrase keeps access until it is changed. *Mitigation:* rotate the passphrase at offboarding, keep the staff SSID on company-managed devices only, and keep guests on a separate SSID and VLAN.
+9. **Revisit when:** Staff turnover increases, headcount grows, auditability or compliance requires per-user network authentication, or a verified RADIUS option becomes available.
+
+> Support for specific WPA3 modes must be verified on the actual access points and clients. See `architecture/network-architecture.md` for sources.
