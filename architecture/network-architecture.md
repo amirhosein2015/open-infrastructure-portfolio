@@ -4,6 +4,8 @@
 
 Diagram: **Diagram 2 — Office Network Topology** (`diagrams/02-office-network-topology.drawio`).
 
+![Diagram 2: Office Network Topology](../diagrams/02-office-network-topology.png)
+
 ## 1. Purpose and scope
 
 This document describes the logical network of a single office for about 15 employees: how devices connect, how traffic is segmented, and which controls protect each segment.
