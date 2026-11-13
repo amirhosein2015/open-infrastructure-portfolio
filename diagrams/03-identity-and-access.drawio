@@ -1,0 +1,83 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="03 Identity and Access" id="identity-and-access">
+    <mxGraphModel dx="1000" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="640" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="t1" value="Diagram 3 — Identity and Access Architecture" style="text;html=1;align=left;verticalAlign=middle;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="10" width="700" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="t2" value="Proposed design. Group and account names are examples. Not deployed." style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="40" y="36" width="700" height="20" as="geometry"/>
+        </mxCell>
+
+        <!-- People -->
+        <mxCell id="p1" value="Employees&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;daily accounts&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="150" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="p2" value="IT and Cloud Administrators&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;separate administrative accounts&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="230" y="80" width="190" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="p3" value="Emergency access accounts&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;two, cloud-only, monitored&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="460" y="80" width="190" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Entra ID -->
+        <mxCell id="ent" value="Microsoft Entra ID — identity platform" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=top;fontStyle=1;fontSize=12;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="40" y="190" width="920" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="mfa" value="MFA&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;Baseline: security defaults&lt;br&gt;Enhanced: Conditional Access (licence)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="ent">
+          <mxGeometry x="20" y="40" width="260" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="grp" value="Groups&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;grp-all-staff, grp-employees, grp-developers,&lt;br&gt;grp-leads, grp-it-admins, grp-cloud-admins,&lt;br&gt;grp-management, grp-emergency-access&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="ent">
+          <mxGeometry x="310" y="40" width="300" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="rol" value="Roles&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;Entra roles for the directory and Microsoft 365&lt;br&gt;Azure RBAC roles for Azure resources&lt;br&gt;(two separate systems)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="ent">
+          <mxGeometry x="640" y="40" width="260" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- Targets -->
+        <mxCell id="m365" value="Microsoft 365&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;Exchange, Teams, SharePoint, OneDrive&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="400" width="280" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="az" value="Azure resources&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;roles assigned to groups at resource-group scope&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="400" width="280" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="dev" value="Company laptops&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;baseline: documented manual standard&lt;br&gt;enhanced: Intune (licence to confirm)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="680" y="400" width="280" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- Edges: people to Entra -->
+        <mxCell id="e1" value="sign in" style="html=1;endArrow=block;strokeWidth=2;strokeColor=#333333;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.1;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="p1" target="ent">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2" value="admin sign in" style="html=1;endArrow=block;strokeWidth=2;strokeColor=#b85450;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.3;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="p2" target="ent">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3" value="emergency sign in (alerted)" style="html=1;endArrow=block;dashed=1;strokeWidth=2;strokeColor=#d6b656;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.6;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="p3" target="ent">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Edges: Entra to targets -->
+        <mxCell id="e4" value="licences and permissions" style="html=1;endArrow=block;strokeWidth=2;strokeColor=#333333;fontSize=10;exitX=0.15;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="ent" target="m365">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e5" value="Azure RBAC" style="html=1;endArrow=block;strokeWidth=2;strokeColor=#333333;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="ent" target="az">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e6" value="sign-in to managed devices" style="html=1;endArrow=block;strokeWidth=2;strokeColor=#333333;fontSize=10;exitX=0.85;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="ent" target="dev">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Notes -->
+        <mxCell id="n1" value="Principles: access is granted to groups, not individuals. Administrative accounts are separate from daily accounts. Developers deploy to Production only through the approved pipeline; no standing production administrator rights. Security defaults and Conditional Access are alternatives, not a combination: security defaults must be turned off before Conditional Access replaces them. Premium features (Conditional Access, risk-based policies, Privileged Identity Management, Intune) depend on licensing that has not been assumed." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=10;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="505" width="920" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="lg" value="Solid arrows: normal sign-in and access flow. Dashed arrow: emergency use, monitored and reviewed. Entra roles and Azure RBAC are separate permission systems." style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=10;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="40" y="595" width="920" height="30" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

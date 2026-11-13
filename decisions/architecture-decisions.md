@@ -17,6 +17,9 @@
 | ADR-007 | Use Infrastructure as Code (Azure Bicep) as a documented concept, not a deliverable | Proposed |
 | ADR-008 | Three baseline VLANs (Staff, Guest, Management) with the firewall as the single inter-VLAN policy point | Proposed |
 | ADR-009 | Shared-passphrase Wi-Fi for staff as the baseline, with 802.1X as the upgrade path | Proposed |
+| ADR-010 | Security defaults as the MFA baseline, Conditional Access as the licence-dependent enhancement | Proposed |
+| ADR-011 | Documented manual endpoint baseline, with Intune-based management as the licence-dependent upgrade | Proposed |
+| ADR-012 | Separate administrative accounts and two emergency access accounts; no standing production administration for developers | Proposed |
 
 ---
 
@@ -176,3 +179,56 @@
 9. **Revisit when:** Staff turnover increases, headcount grows, auditability or compliance requires per-user network authentication, or a verified RADIUS option becomes available.
 
 > Support for specific WPA3 modes must be verified on the actual access points and clients. See `architecture/network-architecture.md` for sources.
+
+---
+
+## ADR-010 — Security defaults as the MFA baseline, Conditional Access as the licence-dependent enhancement
+
+1. **Context:** MFA is required, but the licence tier is unknown (A-03, I-03). Microsoft documents security defaults as available at no extra cost, and Conditional Access as requiring at least Microsoft Entra ID P1 (Microsoft also states that Microsoft 365 Business Premium provides Conditional Access). Sources and access date are in `security/identity-management.md`.
+2. **Problem:** How should MFA be enforced without assuming a licence that may not exist?
+3. **Options considered:**
+   - A) Security defaults.
+   - B) Conditional Access policies.
+   - C) Per-user legacy MFA settings.
+4. **Decision:** Option A as the baseline; Option B as the documented enhancement once licensing is confirmed. Option C is not used.
+5. **Reasoning:** Security defaults require no licence and cover MFA registration, MFA for administrators, blocking of legacy authentication, and MFA for privileged activities. Conditional Access allows precise control but needs licensing and careful design. Microsoft states that the two are alternatives: security defaults must be disabled before Conditional Access replaces them.
+6. **Advantages:** Free and quick; a sound starting point; clear upgrade path.
+7. **Disadvantages:** No customization and no exclusions; one setting for everyone; emergency access accounts cannot be excluded.
+8. **Risks:** Switching to Conditional Access can leave a gap if protections are not recreated, and a policy error can lock out administrators. *Mitigation:* recreate every protection explicitly before switching, keep emergency access accounts, and test.
+9. **Revisit when:** A qualifying licence is confirmed, device-compliance conditions are needed, or exceptions per group or application become necessary.
+
+> Licence statements must be re-verified before use. They are accurate only as of the access date recorded in the identity document.
+
+---
+
+## ADR-011 — Documented manual endpoint baseline, with Intune-based management as the licence-dependent upgrade
+
+1. **Context:** Company-managed Windows laptops (A-08). Microsoft's Intune licensing page states that Intune is included only with the licences listed on its plans and pricing page, and names Microsoft 365 E3, E5, and E7 as examples. It does not name Business Premium, so no claim is made about it.
+2. **Problem:** How to secure laptops without assuming that central device management is licensed?
+3. **Options considered:**
+   - A) A documented manual baseline (encryption, updates, antimalware, no daily local admin, inventory, lost-device procedure).
+   - B) Intune-based central management.
+   - C) No defined endpoint standard.
+4. **Decision:** Option A now; Option B when licensing is confirmed. Option C is rejected.
+5. **Reasoning:** A written baseline is achievable at 15 devices and avoids an unverified licence assumption. Central management provides enforcement and reporting but depends on licensing and adds operating effort.
+6. **Advantages:** No licence dependency; the standard exists and can be audited manually; clear migration path.
+7. **Disadvantages:** Depends on discipline; no central proof of compliance; remote wipe and compliance-based access are unavailable; poor scaling.
+8. **Risks:** Configuration drift and undetected non-compliance. *Mitigation:* an inventory, periodic spot checks, and a short documented checklist at device preparation.
+9. **Revisit when:** Intune inclusion is confirmed for the organization's licence, the device count grows, or compliance-based access is required.
+
+---
+
+## ADR-012 — Separate administrative accounts and two emergency access accounts; no standing production administration for developers
+
+1. **Context:** A small team where one person may hold several roles (I-04). Production must be protected from routine changes and from compromise of a daily account.
+2. **Problem:** How should administrative access be structured so privilege is limited, attributable, and recoverable?
+3. **Options considered:**
+   - A) Administrators use their daily account with extra roles.
+   - B) Separate administrative accounts, two emergency access accounts, and no standing production administration for developers.
+   - C) Time-limited elevation for all privileged access (Privileged Identity Management).
+4. **Decision:** Option B as the baseline; Option C as an enhancement.
+5. **Reasoning:** A daily account is exposed to phishing and malware, so administrative rights should not live on it. Emergency access accounts prevent a lockout. Developers change Production through the reviewed pipeline, not by standing rights. Microsoft states that Privileged Identity Management requires Microsoft Entra ID P2 or Entra ID Governance, so it cannot be a baseline assumption.
+6. **Advantages:** Smaller blast radius; attributable actions; recoverable from lockout; no licence dependency.
+7. **Disadvantages:** More accounts to manage; administrators switch accounts; permanent administrative roles remain between uses; the emergency accounts need disciplined custody and testing.
+8. **Risks:** Neglected emergency accounts, or administrative accounts used for daily work. *Mitigation:* alerts on any emergency sign-in, validation at least every 90 days, regular access reviews, and a rule that administrative accounts are not used for email or browsing.
+9. **Revisit when:** Privileged activity grows, a qualifying licence for time-limited elevation is available, or a compliance requirement calls for stricter privileged access control.
