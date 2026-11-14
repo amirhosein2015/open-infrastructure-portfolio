@@ -158,7 +158,7 @@ Remote administration of the office network itself is **not enabled** in the bas
 | Dedicated monitoring tool | Central view and alerts | Needs hosting and maintenance, which conflicts with N-02 |
 | Cloud-managed vendor service | Central view without on-premises hosting | Depends on the vendor; licensing must be verified |
 
-The choice is deferred to the operations phase (`operations/monitoring-and-alerting.md`). Retention periods and alert thresholds are not defined here.
+The decision is documented in [`../operations/monitoring-and-alerting.md`](../operations/monitoring-and-alerting.md), section 8 (ADR-020): built-in device dashboards as the baseline, a cloud-managed vendor service as an optional enhancement, and no self-hosted tool. Retention periods and alert thresholds are not defined here.
 
 ## 10. Availability and risk
 

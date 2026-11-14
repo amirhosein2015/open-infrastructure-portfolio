@@ -5,6 +5,8 @@
 
 Diagram: **Diagram 5 — DevOps Deployment Workflow** (`diagrams/05-devops-deployment-workflow.drawio`).
 
+![Diagram 5: DevOps Deployment Workflow](../diagrams/05-devops-deployment-workflow.png)
+
 ## 1. Purpose and scope
 
 This document describes how a change moves from a developer's laptop to Production in the reference organization: source control, review, build, test, artifact handling, promotion through the three environments, production approval, rollback, and how infrastructure itself is managed as code.

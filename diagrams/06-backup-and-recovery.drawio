@@ -1,0 +1,64 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="06 Backup and Recovery" id="backup-and-recovery">
+    <mxGraphModel dx="1000" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="700" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="t1" value="Diagram 6 — Backup and Recovery Architecture" style="text;html=1;align=left;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="40" y="10" width="700" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="t2" value="Proposed design. Conceptual: nothing has been configured or restored. RPO, RTO and retention are intentionally not defined." style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="40" y="36" width="920" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="o1" value="Recovery objectives and retention&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;RPO / RTO / retention per data class: NOT DEFINED - set by management from business requirements (A-06)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="70" width="920" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="az" value="Azure workloads (ADR-006)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="135" width="440" height="270" as="geometry"/>
+        </mxCell>
+        <mxCell id="az1" value="Application data stores&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;product not selected (ADR-004)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="175" width="400" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="az2" value="Azure Backup (where the product is supported)&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;vault in rg-shared-ops, separate from protected resource groups&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="245" width="400" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="az3" value="Infrastructure definitions in Git&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;rebuild of resources (concept, ADR-007)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="320" width="400" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="m365" value="Microsoft 365 data (ADR-006, ADR-018)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="520" y="135" width="440" height="270" as="geometry"/>
+        </mxCell>
+        <mxCell id="m1" value="Exchange Online, SharePoint, OneDrive" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="540" y="175" width="400" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="m2" value="Built-in protections (baseline)&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;Recoverable Items, recycle bins, Files Restore, versions - windows are limited&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="540" y="245" width="400" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="m3" value="Dedicated backup: DEFERRED (ADR-018)&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;options: Microsoft 365 Backup or third party, decided after objectives exist&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="540" y="320" width="400" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1" value="protected by" style="endArrow=block;html=1;strokeColor=#666666;fontSize=9;" edge="1" parent="1" source="az1" target="az2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2" value="protected by" style="endArrow=block;html=1;strokeColor=#666666;fontSize=9;" edge="1" parent="1" source="m1" target="m2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="r1" value="Recovery procedures (runbooks, planned)&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;owned, dated, tested by someone other than the author&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="430" width="440" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="r2" value="Restore testing&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;a backup is proven only by a successful restore - frequency not defined&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="520" y="430" width="440" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3" value="" style="endArrow=block;html=1;strokeColor=#666666;fontSize=9;" edge="1" parent="1" source="az2" target="r1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e4" value="" style="endArrow=block;html=1;strokeColor=#666666;fontSize=9;" edge="1" parent="1" source="m2" target="r2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="n1" value="Notes: Azure Backup is not assumed to protect Microsoft 365 data. Backups are protected from deletion by restricted administration, separate admin accounts and alerts on backup changes (AL-09, AL-10). Teams, Entra recoverability and Key Vault recovery are not assessed. Illustrative: no tested restore exists." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;align=left;verticalAlign=top;spacingLeft=8;spacingRight=8;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="40" y="520" width="920" height="70" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

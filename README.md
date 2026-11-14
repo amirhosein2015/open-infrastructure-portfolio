@@ -83,7 +83,8 @@ open-infrastructure-portfolio/
 │   ├── monitoring-and-alerting.md
 │   ├── onboarding-offboarding.md
 │   ├── incident-response.md
-│   └── change-management.md
+│   ├── change-management.md
+│   └── governance-and-runbooks.md
 ├── decisions/
 │   ├── architecture-decisions.md
 │   └── technology-comparison.md
@@ -114,7 +115,7 @@ Six editable diagrams (diagrams.net) are planned: main architecture, office netw
 | 4 | Identity and security | Draft |
 | 5 | Azure | Draft |
 | 6 | DevOps | Draft |
-| 7 | IT operations | Not started |
+| 7 | IT operations | Draft |
 | 8 | Final review, PDF, presentation | Not started |
 
 ## 12. Licence
