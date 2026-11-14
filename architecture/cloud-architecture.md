@@ -5,6 +5,8 @@
 
 Diagram: **Diagram 4 — Azure Resource Architecture** (`diagrams/04-azure-resource-architecture.drawio`).
 
+![Diagram 4: Azure Resource Architecture](../diagrams/04-azure-resource-architecture.png)
+
 ## 1. Purpose and scope
 
 This document describes how Azure resources are organized for the reference organization: subscription and resource groups, environment separation, hosting and data tiers, secrets, monitoring, backup, tagging, and cost control.
