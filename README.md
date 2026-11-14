@@ -2,7 +2,7 @@
 
 **IT Infrastructure, Cloud Architecture, Systems Administration & DevOps Design**
 
-> **Status: Phase 1 (Foundation) — draft.**
+> **Status: Phases 1–8 complete as drafts. The design is proposed, not implemented.**
 > This is a documentation-first architecture portfolio. Everything described here is a **proposed design** for an **illustrative** organization. Nothing in this repository has been deployed, tested, or validated in a live environment.
 
 ---
@@ -63,7 +63,7 @@ This is **not** a real company's verified infrastructure.
 | 5 | DevOps and Automation | Git workflow, CI/CD, artifact promotion, IaC concepts (Bicep) |
 | 6 | IT Operations and Governance | Monitoring, incidents, changes, backup/DR, cost, runbooks |
 
-## 8. Repository structure (planned)
+## 8. Repository structure
 
 ```
 open-infrastructure-portfolio/
@@ -88,6 +88,9 @@ open-infrastructure-portfolio/
 ├── decisions/
 │   ├── architecture-decisions.md
 │   └── technology-comparison.md
+├── docs/
+│   ├── interview-guide.md
+│   └── open-infrastructure-portfolio.pdf   # combined read-only copy of the documents
 └── diagrams/            # diagrams.net (.drawio) source files + exported images
 ```
 
@@ -105,6 +108,8 @@ Six editable diagrams (diagrams.net) are planned: main architecture, office netw
 | **Illustrative** | Example values or snippets; not tested |
 | **Implemented** | Actually built and verified (currently: none) |
 
+Assumption IDs: `A-nn` are defined in `architecture/reference-scenario.md`; `N-nn` in the network architecture, `I-nn` in identity management, `Z-nn` in the cloud architecture, and `D-nn` in the infrastructure design.
+
 ## 11. Project status
 
 | Phase | Content | Status |
@@ -116,7 +121,7 @@ Six editable diagrams (diagrams.net) are planned: main architecture, office netw
 | 5 | Azure | Draft |
 | 6 | DevOps | Draft |
 | 7 | IT operations | Draft |
-| 8 | Final review, PDF, presentation | Not started |
+| 8 | Final review, interview guide, combined PDF | Draft |
 
 ## 12. Licence
 
