@@ -25,6 +25,9 @@
 | ADR-015 | Short-lived branches merged into a protected main; environments are not branches | Proposed |
 | ADR-016 | Promote one immutable artifact through all environments, with manual approval before Production and a designed rollback | Proposed |
 | ADR-017 | Federated deployment identity scoped per environment instead of stored pipeline secrets | Proposed |
+| ADR-018 | Microsoft 365 recovery posture: built-in protections as baseline, dedicated backup product deferred until RPO and RTO exist | Deferred |
+| ADR-019 | Proportionate change management (standard, normal, emergency) reusing pipeline approval, with a NIST-aligned incident lifecycle | Proposed |
+| ADR-020 | Small, owner-based alerting baseline; built-in network dashboards; no self-hosted monitoring tool | Proposed |
 
 ---
 
@@ -330,3 +333,62 @@
 9. **Revisit when:** The pipeline product is chosen and lacks federation support, Production moves to its own subscription, or the deployment model changes.
 
 > The exact role needed for deployment must be verified against the permissions of each candidate role before use. No identity has been created.
+
+---
+
+## ADR-018 — Microsoft 365 recovery posture: built-in protections as baseline, dedicated backup product deferred until RPO and RTO exist
+
+1. **Context:** Microsoft 365 data (Exchange mail, SharePoint, OneDrive) is not covered by Azure Backup (ADR-006). Microsoft documents built-in protections: Exchange Recoverable Items retention (14 days by default, up to 30), SharePoint and OneDrive recycle bins (93 days), file restore (30 days), version history, and short-term metadata backups. Microsoft also offers Microsoft 365 Backup as a pay-as-you-go service, and third-party products exist. RPO and RTO are not defined (A-06), and no prices are stated in this portfolio.
+2. **Problem:** What recovery posture should the design assume for Microsoft 365 data, and when should a dedicated backup be chosen?
+3. **Options considered:**
+   - A) Built-in protections only, with gaps documented.
+   - B) Microsoft 365 Backup (first-party, pay-as-you-go).
+   - C) A third-party backup product.
+4. **Decision:** Deferred. Option A is the documented baseline. The choice between B and C, or staying with A, is made only after management defines RPO, RTO, and retention for each data class and a restore test shows whether the built-in protections meet them.
+5. **Reasoning:** Choosing a product before objectives exist would invent requirements and costs. Documenting the built-in limits keeps the gap visible and honest.
+6. **Advantages:** No unjustified spend; the gaps are explicit; the decision is traceable to requirements.
+7. **Disadvantages:** Recovery from long-undetected deletion, tenant-wide compromise, or retention beyond built-in windows may not be possible until the decision is made.
+8. **Risks:** The deferral becomes permanent by neglect. *Mitigation:* the objectives table is reviewed yearly and after incidents, and restore tests are run per data owner.
+9. **Revisit when:** Objectives are defined, a restore test fails, a contract or compliance driver sets retention, data volume or criticality grows, or Microsoft changes the built-in protections or the licence terms of its backup service.
+
+> Feature behaviour and licence terms must be re-verified before use. No backup has been configured or tested.
+
+---
+
+## ADR-019 — Proportionate change management (standard, normal, emergency) reusing pipeline approval, with a NIST-aligned incident lifecycle
+
+1. **Context:** A small team already has pull-request review and a production approval gate (ADR-015, ADR-016). Changes outside code (tenant settings, firewall rules, roles) have no equivalent control. NIST SP 800-61 Rev. 3 states that organizations should use whichever incident life cycle model suits them best.
+2. **Problem:** How should changes and incidents be governed without slowing a 15-person organization or duplicating controls?
+3. **Options considered:**
+   - A) Three change types (standard, normal, emergency) with approval by area, reusing existing gates, and a simple seven-step incident lifecycle.
+   - B) Heavyweight change advisory board and formal ITIL-style process.
+   - C) No formal process; ad-hoc communication.
+4. **Decision:** Option A.
+5. **Reasoning:** Option B is disproportionate at this size. Option C leaves risky changes (lockout, exposure) unreviewed and incidents unstructured. Option A adds review only where risk justifies it.
+6. **Advantages:** Light; no double approval for releases; clear emergency path; consistent records; learning loop through reviews.
+7. **Disadvantages:** Depends on discipline; the classification can be misjudged; a simple register offers little reporting.
+8. **Risks:** Everything classed as standard or emergency to avoid review. *Mitigation:* when in doubt treat as normal, emergency changes are reviewed afterwards, and the mix of change types is tracked.
+9. **Revisit when:** The team or system count grows, a compliance or customer requirement demands stricter evidence, or change-caused incidents rise.
+
+> Time limits, lead times, response times, and notification duties are intentionally not defined.
+
+---
+
+## ADR-020 — Small, owner-based alerting baseline; built-in network dashboards; no self-hosted monitoring tool
+
+1. **Context:** Monitoring spans identity, Microsoft 365, the office network, Azure, applications, the pipeline, backups, secrets, and cost. Microsoft documents alert rules, action groups, stateful and stateless alerts, and 30-day storage of fired alerts. There are no on-premises servers (N-02). Thresholds and retention are not defined.
+2. **Problem:** What monitoring baseline gives useful coverage without alert fatigue, extra cost, or a tool to host?
+3. **Options considered:**
+   - A) A small catalogue of owner-assigned alerts, routed to shared channels, plus built-in device dashboards for the network.
+   - B) A cloud-managed network monitoring service from the device vendor.
+   - C) A self-hosted monitoring platform.
+   - D) Broad alerting on everything available.
+4. **Decision:** Option A as baseline. Option B is an optional enhancement if available with the chosen devices and its licence and cost are verified. Options C and D are rejected for this scenario.
+5. **Reasoning:** Alerts without an owner and a first action are noise. A self-hosted tool would need a server and maintenance the organization does not have. Built-in dashboards cost nothing extra and fit the size.
+6. **Advantages:** Low cost and effort; clear ownership; links to runbooks and incident priorities.
+7. **Disadvantages:** Limited correlation; manual review of network logs; gaps appear only after incidents reveal them.
+8. **Risks:** Missed detection because the catalogue is small; alerts that silently stop working; short default log retention. *Mitigation:* add alerts after each incident, test notification routes, review alerts that never fire, and decide early which logs must outlive default retention.
+9. **Revisit when:** Services or environments multiply, security needs call for central correlation, after-hours coverage is required, or compliance demands defined log retention.
+
+> Entra log export paths and licence requirements are not verified. No alert has been created.
+

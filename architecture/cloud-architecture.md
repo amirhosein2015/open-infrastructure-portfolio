@@ -134,7 +134,7 @@ Network security groups, firewalls, and private endpoints are not selected in th
 | Azure Monitor | Platform metrics, activity logs, and alerts |
 | Log Analytics workspace | Central store for logs and queries. Located in `rg-shared-ops` |
 | Application Insights | Application telemetry, **where the application type and hosting product support it** |
-| Entra sign-in and audit logs | Sent to the workspace so identity events are retained and alertable (security policy P-09) |
+| Entra sign-in and audit logs | Intended to be exported so identity events are retained and alertable (security policy P-09). The export path and the licence it requires are **not verified**; see [`../operations/monitoring-and-alerting.md`](../operations/monitoring-and-alerting.md), section 4 |
 | Alerts and action groups | Notify the responsible role; defined in Phase 7 |
 
 Log Analytics facts from Microsoft's documentation: tables retain data for **30 days by default** (some log tables 90 days); analytics retention can be extended up to **730 days** at extra cost; total retention can reach **12 years** using a lower-cost long-term state; **31 days** of analytics retention are included in the ingestion price; and charges depend on data volume and retention days. Per-GB prices are not stated here.

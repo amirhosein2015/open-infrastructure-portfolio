@@ -90,6 +90,9 @@ For quick reference. Details and reasoning are in the ADRs.
 | Branching | Short-lived branches, protected main | Branch per environment, GitFlow | Simplicity and build-once versus structure | ADR-015 |
 | Releases | One immutable artifact, approval before Production | Rebuild per environment, auto-deploy to Production | Safety versus speed | ADR-016 |
 | Pipeline identity | Federated credential per environment | Stored service-principal secret | No long-lived secret versus simpler setup | ADR-017 |
+| Microsoft 365 recovery | **Deferred**; built-in protections as baseline | Microsoft 365 Backup or third-party backup now | Honest gaps and no invented spend versus stronger recovery | ADR-018 |
+| Change and incident process | Three change types, reuse pipeline gates, simple lifecycle | Heavy CAB process, or none | Proportionate control versus formality | ADR-019 |
+| Monitoring | Small owner-based alert set, built-in network dashboards | Self-hosted tool, vendor cloud service, broad alerting | Low cost and clarity versus correlation and coverage | ADR-020 |
 
 ## 7. Limitations
 
