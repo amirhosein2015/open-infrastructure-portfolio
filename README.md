@@ -88,6 +88,7 @@ open-infrastructure-portfolio/
 ├── decisions/
 │   ├── architecture-decisions.md
 │   └── technology-comparison.md
+├── assignment/          # two-page summary PDF and simplified diagram (.drawio, .svg, .png)
 ├── docs/
 │   ├── interview-guide.md
 │   └── open-infrastructure-portfolio.pdf   # combined read-only copy of the documents
