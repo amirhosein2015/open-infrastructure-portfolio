@@ -86,4 +86,4 @@ In this design, **identity is the primary security perimeter** for cloud resourc
 
 ## 9. Well-Architected review note
 
-The five Azure Well-Architected pillars (Reliability, Security, Cost Optimization, Operational Excellence, Performance Efficiency) will be used as a practical checklist in Phase 8. This is a self-review aid, not an official Microsoft assessment, and no assessment has been performed.
+The five Azure Well-Architected pillars (Reliability, Security, Cost Optimization, Operational Excellence, Performance Efficiency) are used as a practical checklist: each detailed document ends with a short self-review table. These are self-review aids, not an official Microsoft assessment, and no formal assessment has been performed.

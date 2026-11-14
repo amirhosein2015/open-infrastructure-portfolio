@@ -43,7 +43,7 @@ Notes:
 - **Production access for developers:** Developers and leads change Production **only through the pipeline**, after review and approval. Direct changes and standing administrator rights are not granted. Read access for diagnosis should be limited and logged. Break-glass elevation for incidents is a documented exception (see section 4).
 - **Cloud Administrator and IT Administrator:** in the illustrative counts these may be the same person. That person still uses a **daily account** for ordinary work and a **separate administrative account** for administration, never one account for both.
 - **Management:** read-only views for oversight; no technical changes.
-- **Backup:** restore operations are administrative and require a documented request. Who can restore which data, and the restore-test cadence, are defined in Phase 7.
+- **Backup:** restore operations are administrative and require a documented request. Roles for restores are outlined in `operations/backup-and-recovery.md`; the restore-test frequency is not defined.
 - **Employee** access to Azure is none; the role uses Microsoft 365 and the office network only.
 
 ## 4. Exceptions and elevation

@@ -82,7 +82,7 @@
 8. **Risks:** Licensing details change. *Mitigation:* every licensing statement must be verified against current official Microsoft documentation and carry a date and source.
 9. **Revisit when:** Licence tiers are confirmed, security requirements increase, or the device fleet grows beyond what manual processes can manage.
 
-> **Verification pending:** Which MFA and baseline-protection options are available at each licence tier will be confirmed from Microsoft Learn in Phase 4. No claim is made here.
+> **Verification:** The MFA and baseline-protection options per licence tier are documented from Microsoft Learn in `security/identity-management.md`; Intune in Business Premium remains unverified.
 
 ---
 
@@ -129,7 +129,7 @@
 5. **Reasoning:** These are different platforms with different protection mechanisms. Azure workload backup should not be assumed to cover Exchange Online, SharePoint, or OneDrive. Built-in Microsoft 365 retention and recovery features have limits that must be evaluated against business requirements.
 6. **Advantages:** Makes coverage gaps visible; supports accurate restore planning.
 7. **Disadvantages:** More documentation; possible additional tooling or cost for Microsoft 365 backup.
-8. **Risks:** Assuming built-in features meet requirements. *Mitigation:* document the built-in capabilities from official sources in Phase 7 and decide on third-party backup only against defined RPO/RTO.
+8. **Risks:** Assuming built-in features meet requirements. *Mitigation:* built-in capabilities are documented from official sources in `operations/backup-and-recovery.md`, and the decision on a third-party backup is made on third-party backup only against defined RPO/RTO.
 9. **Revisit when:** RPO/RTO or retention requirements are defined, or after a restore test reveals gaps.
 
 > RPO/RTO values are intentionally not set. They must be derived from business requirements (A-06). A successful backup job does not prove recoverability; restore testing is a required operational activity.
