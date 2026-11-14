@@ -5,7 +5,7 @@
 
 Diagram: **Diagram 6 — Backup and Recovery Architecture** (`diagrams/06-backup-and-recovery.drawio`).
 
-> The exported image `diagrams/06-backup-and-recovery.png` is added after the `.drawio` source is exported from diagrams.net; it is embedded in a later commit.
+![Diagram 6: Backup and Recovery Architecture](../diagrams/06-backup-and-recovery.png)
 
 ## 1. Purpose and scope
 
