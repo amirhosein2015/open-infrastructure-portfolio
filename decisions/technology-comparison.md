@@ -87,6 +87,9 @@ For quick reference. Details and reasoning are in the ADRs.
 | IaC | Concept only | Full templates | Honesty versus demonstrated syntax | ADR-007 |
 | Key Vault | One per environment | One shared vault | Strong boundary versus fewer objects | ADR-013 |
 | Azure roles | Group-based, resource-group scope, minimal subscription roles | Broad subscription roles | Isolation versus convenience | ADR-014 |
+| Branching | Short-lived branches, protected main | Branch per environment, GitFlow | Simplicity and build-once versus structure | ADR-015 |
+| Releases | One immutable artifact, approval before Production | Rebuild per environment, auto-deploy to Production | Safety versus speed | ADR-016 |
+| Pipeline identity | Federated credential per environment | Stored service-principal secret | No long-lived secret versus simpler setup | ADR-017 |
 
 ## 7. Limitations
 

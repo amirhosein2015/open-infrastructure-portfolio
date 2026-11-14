@@ -22,6 +22,9 @@
 | ADR-012 | Separate administrative accounts and two emergency access accounts; no standing production administration for developers | Proposed |
 | ADR-013 | One Key Vault per environment, Azure RBAC authorization, and managed identities for application access | Proposed |
 | ADR-014 | Group-based Azure roles at resource-group scope; subscription-scope roles limited to a minimal set of administrative accounts | Proposed |
+| ADR-015 | Short-lived branches merged into a protected main; environments are not branches | Proposed |
+| ADR-016 | Promote one immutable artifact through all environments, with manual approval before Production and a designed rollback | Proposed |
+| ADR-017 | Federated deployment identity scoped per environment instead of stored pipeline secrets | Proposed |
 
 ---
 
@@ -272,3 +275,58 @@
 9. **Revisit when:** A qualifying licence enables time-limited elevation, a narrower built-in or custom role can replace Owner for the cloud administrator (to be evaluated and verified, not assumed), headcount grows, or Production moves to its own subscription.
 
 > Which built-in role best fits each duty must be verified against the permissions each role actually grants before use. The role names in the access matrix are illustrative.
+
+---
+
+## ADR-015 — Short-lived branches merged into a protected main; environments are not branches
+
+1. **Context:** About eight engineers (D-03), three environments (ADR-002), and a requirement that the same artifact reaches every environment. The Git product is not selected (A-09). GitHub's documentation states that branch protection can require approving reviews, passing status checks, resolved conversations, and can block force pushes, with availability depending on plan and repository type.
+2. **Problem:** Which branching model keeps changes reviewed and releasable without heavy process?
+3. **Options considered:**
+   - A) Short-lived feature branches merged into a protected `main`.
+   - B) Long-lived branches per environment.
+   - C) GitFlow-style release and hotfix branches.
+4. **Decision:** Option A. `main` is protected, always releasable, and every environment deploys an artifact built from it.
+5. **Reasoning:** Option B encourages per-environment rebuilds and drift, which contradicts ADR-016. Option C adds merge overhead that a team of this size does not need. Option A keeps a single source of truth and fast integration.
+6. **Advantages:** Simple; supports build-once; small merges are easier to review and revert.
+7. **Disadvantages:** Relies on dependable automated checks; unfinished work must be hidden behind configuration if merged early; needs review discipline in a small team.
+8. **Risks:** Rubber-stamp reviews or a bottleneck with only two leads; branch protection unavailable on a chosen plan. *Mitigation:* any engineer may approve routine changes, sensitive paths need a lead or the cloud administrator, an alternate approver is named, and the product and plan are checked against section 12 of the infrastructure design.
+9. **Revisit when:** The team grows, release cadence needs release branches, a compliance requirement demands stricter controls, or a long-running parallel version must be maintained.
+
+---
+
+## ADR-016 — Promote one immutable artifact through all environments, with manual approval before Production and a designed rollback
+
+1. **Context:** Production must be protected from untested change (ADR-012, ADR-014), and the hosting product is not selected (ADR-004). GitHub's documentation describes environments that can require reviewers, prevent self-review, restrict deployable branches, and scope secrets, and states that on Free, Pro, and Team plans these rules are available only for public repositories. Microsoft documents slot swapping as a rollback mechanism for App Service in specific tiers.
+2. **Problem:** How should changes reach Production so that what is tested is what is deployed, a human confirms the release, and recovery is quick?
+3. **Options considered:**
+   - A) Promote one immutable artifact: Development, Staging, then Production after approval.
+   - B) Rebuild for each environment.
+   - C) Deploy automatically to Production on every merge.
+4. **Decision:** Option A. Production requires explicit approval from a named approver who did not request the deployment. Rollback by redeploying the previous retained artifact is the baseline; slot swap and feature flags are product-dependent additions.
+5. **Reasoning:** Building once removes differences between tested and deployed binaries. Separating requester and approver adds a human check at low cost. Redeploying a retained artifact works with any product, whereas slot swap works only where the product supports it.
+6. **Advantages:** Reproducible releases; clear audit trail; fast, product-neutral rollback; recorded approvals.
+7. **Disadvantages:** Slower than fully automatic release; needs artifact storage and retention; approval depends on a small group; data changes may not be reversible by rolling back the application.
+8. **Risks:** Approval becoming a formality, the platform lacking an enforced approval gate on the chosen plan, rollback never rehearsed. *Mitigation:* defined preconditions for approval, a recorded manual sign-off with restricted pipeline permissions as the fallback, backward-compatible data changes, and periodic rollback rehearsals in Staging.
+9. **Revisit when:** Release frequency rises, the hosting product is selected and offers progressive delivery, the Git or pipeline product is chosen, or a requirement calls for stronger separation of duties.
+
+> Retention windows, rollback triggers, and release windows are intentionally not defined.
+
+---
+
+## ADR-017 — Federated deployment identity scoped per environment instead of stored pipeline secrets
+
+1. **Context:** The pipeline must deploy to Azure. Microsoft documents that GitHub Actions can authenticate to Azure through OpenID Connect, using a Microsoft Entra application or user-assigned managed identity with a federated identity credential, and its instructions store only identifiers (client, tenant, and subscription IDs), not a client secret. The page does not specify a role scope. Azure roles in this design are assigned at resource-group scope (ADR-014).
+2. **Problem:** How should the pipeline authenticate without creating a long-lived credential that can leak?
+3. **Options considered:**
+   - A) A service principal with a stored client secret.
+   - B) Federated credentials (workload identity federation), one identity per environment.
+   - C) Personal credentials of an administrator.
+4. **Decision:** Option B. Each environment has its own deployment identity with a narrowly scoped role at that environment's resource group. The production identity is usable only from jobs that passed the approval gate and from `main`. Option C is rejected.
+5. **Reasoning:** A federated credential removes the need to store and rotate a password, and tokens are short-lived and tied to a repository. Per-environment identities keep a compromise of the Development pipeline away from Production. Personal credentials break attribution and separation of accounts.
+6. **Advantages:** No long-lived pipeline password; least privilege per environment; consistent with the access model.
+7. **Disadvantages:** More setup and more identities; trust configuration must be scoped precisely; depends on the pipeline product supporting federation.
+8. **Risks:** An over-broad trust rule that lets unintended workflows obtain tokens, or an over-broad role assignment. *Mitigation:* restrict trust to the specific repository, branch, or environment, assign roles at resource-group scope, review identities quarterly, and alert on role-assignment changes.
+9. **Revisit when:** The pipeline product is chosen and lacks federation support, Production moves to its own subscription, or the deployment model changes.
+
+> The exact role needed for deployment must be verified against the permissions of each candidate role before use. No identity has been created.
