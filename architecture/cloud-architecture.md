@@ -135,7 +135,7 @@ Network security groups, firewalls, and private endpoints are not selected in th
 | Log Analytics workspace | Central store for logs and queries. Located in `rg-shared-ops` |
 | Application Insights | Application telemetry, **where the application type and hosting product support it** |
 | Entra sign-in and audit logs | Intended to be exported so identity events are retained and alertable (security policy P-09). The export path and the licence it requires are **not verified**; see [`../operations/monitoring-and-alerting.md`](../operations/monitoring-and-alerting.md), section 4 |
-| Alerts and action groups | Notify the responsible role; defined in Phase 7 |
+| Alerts and action groups | Notify the responsible role; see [`../operations/monitoring-and-alerting.md`](../operations/monitoring-and-alerting.md) |
 
 Log Analytics facts from Microsoft's documentation: tables retain data for **30 days by default** (some log tables 90 days); analytics retention can be extended up to **730 days** at extra cost; total retention can reach **12 years** using a lower-cost long-term state; **31 days** of analytics retention are included in the ingestion price; and charges depend on data volume and retention days. Per-GB prices are not stated here.
 
@@ -146,7 +146,7 @@ Log Analytics facts from Microsoft's documentation: tables retain data for **30 
 | One shared workspace (baseline) | One place to query; simpler to operate and to alert on | Access to logs must be controlled carefully so developers do not read Production logs without need; mixed volumes complicate cost attribution |
 | One workspace per environment | Access and retention can differ per environment; clearer costs | More objects to manage; cross-environment queries are harder |
 
-The baseline uses one shared workspace. Revisit when access separation by environment is required. Retention periods and alert thresholds are not defined here; they are set in `operations/monitoring-and-alerting.md` (Phase 7, not yet written).
+The baseline uses one shared workspace. Revisit when access separation by environment is required. Retention periods and alert thresholds are not defined here; they are left to `operations/monitoring-and-alerting.md`, which also does not define them.
 
 ## 10. Backup and recovery for Azure workloads
 
@@ -158,7 +158,7 @@ Microsoft's Azure Backup overview names these protectable workloads: Azure Virtu
 | **Not covered by Azure Backup** | The page does **not** list Exchange Online, SharePoint Online, or OneDrive. Microsoft 365 data needs a separate approach (ADR-006) |
 | Protection of backups | Use soft delete and immutability where available; give backup administration to a restricted group. The configuration details are not described on the overview page and must be verified |
 | Where backups live | A backup vault in `rg-shared-ops`, separate from the resource groups it protects |
-| Proof of recovery | A **successful restore test** is the only proof. Test cadence is defined in Phase 7 |
+| Proof of recovery | A **successful restore test** is the only proof. Test frequency is not defined; see [`../operations/backup-and-recovery.md`](../operations/backup-and-recovery.md) |
 | Objectives | RPO and RTO are **not defined** here and must come from business requirements (A-06) |
 
 A successful backup job does not prove that recovery is possible.

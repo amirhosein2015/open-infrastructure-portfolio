@@ -68,6 +68,7 @@ This is **not** a real company's verified infrastructure.
 ```
 open-infrastructure-portfolio/
 ├── README.md
+├── LICENSE
 ├── architecture/
 │   ├── reference-scenario.md
 │   ├── overview.md
@@ -97,7 +98,7 @@ open-infrastructure-portfolio/
 
 ## 9. Diagrams
 
-Six editable diagrams (diagrams.net) are planned: main architecture, office network, identity and access, Azure resources, DevOps workflow, backup and recovery.
+Six editable diagrams (diagrams.net, with exported images) are included: main architecture, office network, identity and access, Azure resources, DevOps workflow, backup and recovery.
 
 ## 10. Terminology used in this repository
 
@@ -126,4 +127,4 @@ Assumption IDs: `A-nn` are defined in `architecture/reference-scenario.md`; `N-n
 
 ## 12. Licence
 
-To be decided before publication (a documentation licence such as CC BY 4.0 is a common choice).
+Released under the MIT Licence (see [`LICENSE`](LICENSE)). The content is a design portfolio for an illustrative organization and is provided without warranty.
